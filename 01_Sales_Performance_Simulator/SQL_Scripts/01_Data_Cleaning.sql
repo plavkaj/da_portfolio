@@ -1,7 +1,7 @@
 /*
 ===============================================================================
 Project:        Sales Performance & Commission Simulator
-Script:         01_data_cleaning.sql
+Script:         01_Data_Cleaning.sql
 Author:         Juraj Plavka
 Description:    This script sets up the database, creates the schema for raw
 and clean data, and executes the ETL pipeline.
