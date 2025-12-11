@@ -46,7 +46,7 @@ The original dataset contained 12 separate CSV files. The following steps were t
 ## Dashboard
 An interactive dashboard was created in Tableau to visualize these trends.
 
-[![Dashboard Preview](images/dashboard_preview.png)](https://public.tableau.com/views/CyclisticBike-ShareAnAnalysisofMemberandCasualRiders_17562803507210/Dashboard-HowdoannualmembersandcasualridersuseCyclisticbikesdifferently?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
+[![Dashboard Preview](images/dashboard_screenshot.png)](https://public.tableau.com/views/CyclisticBike-ShareAnAnalysisofMemberandCasualRiders_17562803507210/Dashboard-HowdoannualmembersandcasualridersuseCyclisticbikesdifferently?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
 
 > **[Click here to view the interactive dashboard on Tableau Public](https://public.tableau.com/views/CyclisticBike-ShareAnAnalysisofMemberandCasualRiders_17562803507210/Dashboard-HowdoannualmembersandcasualridersuseCyclisticbikesdifferently?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)**
 
@@ -58,3 +58,4 @@ To convert casual riders into members, focus marketing efforts on the benefits o
 
 ---
 *Author: Juraj Plavka* *Date: December 11, 2025*
+
