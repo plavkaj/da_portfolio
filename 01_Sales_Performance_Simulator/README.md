@@ -5,7 +5,7 @@ Project: Sales Performance & Commission Simulator
 **Tools:** SQL (ETL & Logic), Power BI (Visualization), DAX  
 **Goal:** Transform raw retail transaction data into an interactive dashboard to monitor sales performance and simulate a new commission structure for the sales team.
 
-![Dashboard Preview](Dashboard_Final.png)
+![Dashboard Preview](dashboard_screenshot.png)
 *(Note: This dashboard visualizes the finalized commission logic and sales trends)*
 
 ---
@@ -62,4 +62,5 @@ Instead of pre-calculating everything in Excel, I used DAX measures to make the 
 **Source:** Kaggle (originally from UCI Machine Learning Repository)  
 **Link:** [https://www.kaggle.com/datasets/mashlyn/online-retail-ii-uci](https://www.kaggle.com/datasets/mashlyn/online-retail-ii-uci)  
 **License:** CC0: Public Domain
+
 
