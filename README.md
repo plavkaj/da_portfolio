@@ -22,7 +22,7 @@ This repository serves as a portfolio of my projects, documenting my journey fro
 
 ### Portfolio Projects
 
-#### [1. Sales Performance & Commission Simulator](01_Retail_Sales_Performance/)
+#### [1. Sales Performance & Commission Simulator](01_Sales_Performance_Simulator/)
 **Goal:** Analyze 2 years of retail transaction data to evaluate sales trends and simulate the financial impact of a new commission scheme (5% of Margin).
 
 * **Business Problem:** The company needed to move from static Excel reporting to dynamic monitoring and required a financial simulation for a proposed bonus structure.
