@@ -1,8 +1,8 @@
 # Sales Performance & Commission Simulator
 
-**Role:** Commercial Planning Analyst (Simulation)
-**Tools:** SQL (ETL & Logic), Power BI (Visualization), DAX
-**Goal:** Transform raw retail transaction data into an interactive dashboard to monitor sales performance and simulate a new commission structure.
+* **Role:** Commercial Planning Analyst (Simulation)
+* **Tools:** SQL (ETL & Logic), Power BI (Visualization), DAX
+* **Goal:** Transform raw retail transaction data into an interactive dashboard to monitor sales performance and simulate a new commission structure.
 
 ## Project Overview
 A UK-based online retailer needed to move from static Excel reporting to dynamic monitoring. The management also proposed a new bonus scheme (**5% commission on a fixed 30% margin**) and required a financial impact analysis before implementation.
@@ -49,5 +49,6 @@ An interactive dashboard was created to visualize these trends and the simulatio
 * `pbi_reports/` - The Power BI (`.pbix`) file and PDF export.
 * `output/` - Screenshots for documentation.
 * `README.md` - Project documentation.
+
 
 
