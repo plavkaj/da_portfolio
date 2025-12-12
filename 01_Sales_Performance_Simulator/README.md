@@ -47,5 +47,6 @@ An interactive dashboard was created to visualize these trends and the simulatio
 ## Repository Structure
 * `sql_scripts/` - ETL scripts for cleaning and standardization.
 * `pbi_reports/` - The Power BI (`.pbix`) file and PDF export.
-* `images/` - Screenshots for documentation.
+* `output/` - Screenshots for documentation.
 * `README.md` - Project documentation.
+
