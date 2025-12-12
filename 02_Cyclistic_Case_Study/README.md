@@ -48,9 +48,10 @@ An interactive dashboard was created in Tableau to visualize these trends.
 > **[Click here to view the interactive dashboard on Tableau Public](https://public.tableau.com/views/CyclisticBike-ShareAnAnalysisofMemberandCasualRiders_17562803507210/Dashboard-HowdoannualmembersandcasualridersuseCyclisticbikesdifferently?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)**
 
 ## Repository Structure
-* `scripts/` - RMarkdown analysis file (`analysis.Rmd`) and HTML report.
+* `scripts/` - RMarkdown analysis file (`cyclistic_analysis.Rmd`) and HTML report.
 * `output/` - Dashboard screenshots.
 * `README.md` - Project documentation.
+
 
 
 
