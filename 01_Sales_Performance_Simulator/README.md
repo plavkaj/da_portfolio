@@ -17,6 +17,12 @@ A UK-based online retailer needed to move from static Excel reporting to dynamic
 * **Data Visualization:** Power BI
 * **Logic & Calculations:** DAX Measures
 
+## Data Source
+**Dataset:** [Online Retail II UCI](https://www.kaggle.com/datasets/mashlyn/online-retail-ii-uci) (via Kaggle)
+**Date Range:** Dec 2009 – Dec 2011
+**Volume:** ~1 million rows of transaction data
+**Description:** A transnational dataset containing transactions for a UK-based and registered non-store online retail company.
+
 ## Solution Architecture
 I implemented a full-stack data workflow:
 
@@ -49,6 +55,7 @@ An interactive dashboard was created to visualize these trends and the simulatio
 * `pbi_reports/` - The Power BI (`.pbix`) file and PDF export.
 * `output/` - Screenshots for documentation.
 * `README.md` - Project documentation.
+
 
 
 
