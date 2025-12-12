@@ -1,8 +1,8 @@
 # Cyclistic Bike-Share Analysis
 
-**Role:** Data Analyst
-**Tools:** R (Data Cleaning & Analysis), Tableau (Visualization)
-**Goal:** Analyze usage patterns between Casual Riders and Annual Members to drive membership growth.
+* **Role:** Data Analyst
+* **Tools:** R (Data Cleaning & Analysis), Tableau (Visualization)
+* **Goal:** Analyze usage patterns between Casual Riders and Annual Members to drive membership growth.
 
 ## Project Overview
 **Cyclistic**, a bike-share company in Chicago, aims to maximize the number of annual memberships. The Director of Marketing believes the company’s future success depends on converting casual riders into members.
@@ -51,6 +51,7 @@ An interactive dashboard was created in Tableau to visualize these trends.
 * `scripts/` - RMarkdown analysis file (`cyclistic_analysis.Rmd`) and HTML report.
 * `output/` - Dashboard screenshots.
 * `README.md` - Project documentation.
+
 
 
 
