@@ -1,0 +1,259 @@
+---
+title: "Cyclistic Bike-Share Analysis"
+author: "Juraj Plavka"
+date: "2025-12-11"
+output: 
+html_document:
+theme: spacelab
+toc: true
+toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+## Introduction
+
+**Business Task:** The goal of this analysis is to understand how casual riders and annual members use Cyclistic bikes differently. These insights will help the marketing team design strategies to convert casual riders into annual members.
+
+**Data Source:** 12 months of Cyclistic trip data (August 2024 - July 2025).
+
+
+## 1. Setup and Configuration
+
+This script imports 12 months of Cyclistic trip data, cleans anomalies, and prepares the dataset for analysis to understand rider behavior.
+
+First, we load the necessary packages for data manipulation and date handling, and verify the working directory.
+
+```{r packages}
+library(tidyverse)
+library(lubridate)
+library(arrow)
+
+# Verify Working Directory
+print(paste("Current working directory:", getwd()))
+
+# Define file path to the raw data
+raw_data_path <- "../data/raw_data"
+processed_data_path <- "../data/processed_data"
+```
+
+
+## 2. Data Import
+
+We import and merge 12 months of data into a single dataframe using map_df to read all CSV files in the directory at once.
+
+```{r import}
+df <- list.files(path = raw_data_path, pattern = "*.csv", full.names = TRUE) %>%
+  map_df(~read_csv(.))
+
+# Specific inspection of the raw data structure
+glimpse(df)
+```
+
+
+## 3. Data Cleaning
+
+We create a clean version of the dataset by standardizing strings and handling missing values.
+
+**Step A: String Standardization**
+
+* **Trim whitespace** from IDs to ensure accurate counting/matching later.
+
+* **Lowercase and trim** text fields (like rideable_type) to fix inconsistencies.
+
+**STEP B: Handling Missing Values**
+
+* Replace empty strings in text columns with "NA" for clarity in analysis.
+
+```{r lowercase}
+df_clean <- df %>%
+  mutate(
+    across(c(ride_id, start_station_id, end_station_id), ~str_trim(.)),
+    across(c(rideable_type, start_station_name, end_station_name, member_casual), 
+           ~str_trim(str_to_lower(.))),
+  ) %>%
+  mutate(across(where(is.character), ~replace_na(., "NA")))
+
+# Inspect the clean structure
+glimpse(df_clean)
+```
+
+
+## 4. Feature Engineering
+
+We create new columns to analyze ride length and timing trends.
+
+* **trip_duration:** The length of the ride in seconds.
+
+* **hour_of_the_day:** When the ride started.
+
+* **day_of_week_name:** Which day the ride took place.
+
+```{r}
+df_final <- df_clean %>%
+  mutate(
+# Calculate trip duration
+    trip_duration = ended_at - started_at,
+# Extract ride starting hour
+    hour_of_the_day = hour(started_at),
+# Extract day of the week (1=Monday)
+    weekday_started = wday(started_at, week_start = 1),
+# Add a column with the day names as an ordered factor
+    day_of_week_name = factor(weekday_started,
+                              levels = 1:7,
+                              labels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    ))
+
+# Inspect the structure
+glimpse(df_final)
+```
+
+
+## 5. Data Quality Filtering
+
+We filter out data points that do not represent genuine trips:
+
+**Short Trips (< 60s):** Likely false starts or docking errors.
+
+**Long Trips (> 24h):** Likely stolen bikes or system errors.
+
+```{r}
+min_duration_secs <- 60            # 1 minute
+max_duration_secs <- 24 * 60 * 60  # 24 hours
+
+df_filtered <- df_final %>%
+  filter(
+    trip_duration >= as.difftime(min_duration_secs, units = "secs"),
+    trip_duration <= as.difftime(max_duration_secs, units = "secs"))
+```
+
+
+## 6. Analysis: Aggregations
+
+We calculate key metrics to compare Casual riders vs. Members.
+
+**Metric 1: Average trip duration by user type**
+
+How does the total number of rides compare between the two groups?
+
+```{r}
+avg_duration_by_usertype <- df_filtered %>%
+group_by(member_casual) %>%
+  summarise(average_duration_mins = as.numeric(mean(trip_duration, na.rm = TRUE), units = "mins"))
+
+print(avg_duration_by_usertype)
+```
+
+**Metric 2: Most popular day of the week**
+
+```{r}
+mode_by_usertype <- df_filtered %>%
+  count(member_casual, weekday_started) %>%
+  group_by(member_casual) %>%
+  slice_max(order_by = n, n = 1)
+
+print(mode_by_usertype)
+```
+
+## 7. Visualization
+
+**Chart 1: Total Rides by User Type**
+
+Casual riders have a significant number of trips.
+
+```{r}
+# Chart 1: Total Rides by User Type
+ggplot(df_filtered, aes(x = member_casual, fill = member_casual)) +
+  geom_bar() +
+  
+  # Format the labels on the bars to be in millions
+  geom_text(stat='count', aes(label = paste0(round(after_stat(count) / 1e6, 1), "M")), vjust=-0.5) +
+  
+  # Format the Y-AXIS to show millions
+  # scale = 1e-6 divides the number by 1,000,000
+  # accuracy = 0.1 ensures one decimal place
+  scale_y_continuous(labels = scales::label_number(scale = 1e-6, suffix = "M", accuracy = 0.1)) +
+  
+  labs(
+    title = "Total Number of Rides by User Type",
+    subtitle = "Casual riders have a significant number of trips",
+    x = "User Type",
+    y = "Total Number of Rides",
+    fill = "Membership type:") +
+  theme_minimal()
+```
+
+
+**Chart 2: Average Trip Duration by User Type**
+
+Casual riders' trips are significantly longer on average.
+
+```{r}
+ggplot(avg_duration_by_usertype, aes(x = member_casual, y = average_duration_mins, fill = member_casual)) +
+  geom_col() +
+  geom_text(aes(label = paste(round(average_duration_mins, 1), "mins")), vjust=-0.5) +
+  labs(
+    title = "Average Trip Duration by User Type",
+    subtitle = "Casual riders' trips are significantly longer on average",
+    x = "User Type",
+    y = "Average Trip Duration (in seconds)",
+    fill = "Membership type:") +
+  theme_minimal()
+```
+
+
+**Chart 3: Ridership by Day of the Week**
+
+Members are consistent, while casual use peaks on weekends.
+
+```{r}
+ggplot(df_filtered, aes(x = day_of_week_name, fill = member_casual)) +
+  geom_bar(position = "dodge") +
+  labs(
+    title = "Ridership by Day of the Week",
+    subtitle = "Members are consistent, while casual use peaks on weekends",
+    x = "Day of the Week",
+    y = "Total Number of Rides",
+    fill = "Member type:") +
+  scale_y_continuous(labels = scales::label_number(scale = 1e-3, suffix = "k", accuracy = 1)) +
+  theme_minimal()
+```
+
+
+**Chart 4: Bike Type Preference by User Group**
+
+A comparison of the proportion of each bike type used.
+
+```{r}
+ggplot(df_filtered, aes(x = member_casual, fill = rideable_type)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::label_percent()) +
+  labs(
+    title = "Bike Type Preference by User Group",
+    subtitle = "A comparison of the proportion of each bike type used",
+    x = "User Type",
+    y = "Proportion of Total Rides",
+    fill = "Bike Type:") +
+  theme_minimal()
+```
+
+**Chart 5: Rides by Hour of the Day**
+
+Member usage peaks during commute hours; casual use is highest in the afternoon.
+
+```{r}
+ggplot(df_filtered, aes(x = hour_of_the_day, color = member_casual)) +
+  geom_line(stat="count", linewidth=1.5) +
+  labs(
+    title = "Rides by Hour of the Day",
+    subtitle = "Member usage peaks during commute hours; casual use is highest in the afternoon",
+    x = "Hour of the Day (0-23)",
+    y = "Total Number of Rides",
+    color = "Member type:") +
+  scale_y_continuous(labels = scales::label_number(scale = 1e-3, suffix = "k")) +
+  scale_x_continuous(breaks = seq(0, 23, by = 4)) +
+  theme_minimal()
+```
+
+
